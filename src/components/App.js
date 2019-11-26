@@ -6,7 +6,6 @@ import Reader from './Reader/Reader';
 const App = () => (
   <BrowserRouter>
     <div className={styles.container}>
-      <h1>HELLO!!!!</h1>
       <Switch>
         <Route route="/reader" exact component={Reader} />
         <Redirect to="/reader" />
