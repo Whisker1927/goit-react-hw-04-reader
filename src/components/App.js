@@ -1,11 +1,16 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import styles from '../styles/index.module.css';
-import publication from '../Data/publication.json';
 import Reader from './Reader/Reader';
 
 const App = () => (
-  <div className={styles.container}>
-    <Reader items={publication} />
-  </div>
+  <BrowserRouter>
+    <div className={styles.container}>
+      <Switch>
+        <Route route="/reader" exact component={Reader} />
+        <Redirect to="/reader" />
+      </Switch>
+    </div>
+  </BrowserRouter>
 );
 export default App;

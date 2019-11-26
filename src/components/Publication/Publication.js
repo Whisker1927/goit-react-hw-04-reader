@@ -2,9 +2,8 @@ import React from 'react';
 import T from 'prop-types';
 import styles from '../../styles/index.module.css';
 
-const Publication = ({ article, idx }) => (
+const Publication = ({ article }) => (
   <article className={styles.publication}>
-    <p className={styles.idx}>{idx}</p>
     <h2>{article.title}</h2>
     <p className={styles.articleText}>{article.text}</p>
   </article>
@@ -15,6 +14,5 @@ Publication.propTypes = {
     title: T.string.isRequired,
     text: T.string.isRequired,
   }).isRequired,
-  idx: T.number.isRequired,
 };
 export default Publication;

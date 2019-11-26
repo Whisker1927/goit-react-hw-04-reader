@@ -1,50 +1,73 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
+import queryString from 'query-string';
 import Controls from '../Controls/Controls';
 import Counter from '../Counter/Counter';
 import Publication from '../Publication/Publication';
+import publications from '../../Data/publication.json';
 import styles from '../../styles/index.module.css';
 
+//
 export default class Reader extends Component {
   static propTypes = {
-    items: T.arrayOf(
-      T.shape({
-        id: T.string.isRequired,
-        text: T.string.isRequired,
-        title: T.string.isRequired,
-      }),
-    ).isRequired,
+    location: T.shape().isRequired,
+    history: T.shape().isRequired,
   };
 
-  state = {
-    currentIdx: 0,
+  componentDidMount() {
+    const { location, history } = this.props;
+    if (!location.search) {
+      history.replace({
+        ...location,
+        search: '?item=1',
+      });
+    }
+  }
+
+  handlePrevList = () => {
+    const { location, history } = this.props;
+    const parsed = queryString.parse(location.search).item;
+
+    if (parsed > 1) {
+      history.push({
+        ...location,
+        search: `?item=${Number(parsed) - 1}`,
+      });
+    }
   };
 
-  handleNextPublication = () => {
-    this.setState(prevState => ({
-      currentIdx: prevState.currentIdx + 1,
-    }));
-  };
+  handleNextList = () => {
+    const { location, history } = this.props;
+    const parsed = queryString.parse(location.search).item;
 
-  handlePrevPublication = () => {
-    this.setState(prevState => ({
-      currentIdx: prevState.currentIdx - 1,
-    }));
+    if (parsed < publications.length) {
+      history.push({
+        ...location,
+        search: `?item=${Number(parsed) + 1}`,
+      });
+    }
   };
 
   render() {
-    const { currentIdx } = this.state;
-    const { items } = this.props;
+    const { location } = this.props;
+    const parsed = queryString.parse(location.search).item;
     return (
       <div className={styles.reader}>
-        <Controls
-          nextArticle={this.handleNextPublication}
-          prevArticle={this.handlePrevPublication}
-          nextDisabled={currentIdx >= items.length - 1}
-          prevDisabled={currentIdx <= 0}
-        />
-        <Counter currentArticle={currentIdx + 1} allArticles={items.length} />
-        <Publication article={items[currentIdx]} idx={currentIdx + 1} />
+        {parsed && (
+          <>
+            <Controls
+              nextArticle={this.handleNextList}
+              prevArticle={this.handlePrevList}
+              prevDisabled={Number(parsed)}
+              nextDisabled={publications.length}
+            />
+            <Counter
+              currentArticle={Number(parsed)}
+              allArticles={publications.length}
+            />
+            <Publication article={publications[parsed - 1]} />
+          </>
+        )}
       </div>
     );
   }

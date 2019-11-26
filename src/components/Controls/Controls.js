@@ -8,7 +8,7 @@ const Controls = ({ nextArticle, prevArticle, nextDisabled, prevDisabled }) => (
       className={styles.button}
       type="button"
       onClick={prevArticle}
-      disabled={prevDisabled}
+      disabled={prevDisabled === 1}
     >
       Назад
     </button>
@@ -16,7 +16,7 @@ const Controls = ({ nextArticle, prevArticle, nextDisabled, prevDisabled }) => (
       className={styles.button}
       type="button"
       onClick={nextArticle}
-      disabled={nextDisabled}
+      disabled={prevDisabled === nextDisabled}
     >
       Вперед
     </button>
@@ -25,8 +25,8 @@ const Controls = ({ nextArticle, prevArticle, nextDisabled, prevDisabled }) => (
 
 Controls.propTypes = {
   prevArticle: T.func.isRequired,
-  prevDisabled: T.bool.isRequired,
+  prevDisabled: T.number.isRequired,
   nextArticle: T.func.isRequired,
-  nextDisabled: T.bool.isRequired,
+  nextDisabled: T.number.isRequired,
 };
 export default Controls;
